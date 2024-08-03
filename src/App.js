@@ -3,8 +3,8 @@ import GlobalStyle from "./styles/global";
 import Header from "./components/Header";
 import Dashboard from "./components/Dashboard";
 import Form from "./components/Form";
-import Assets from "./components/Assets"
 import "./App.css";
+import ItemService from "./services/item-service";
 
 const App = () => {
   const data = localStorage.getItem("transactions");
@@ -35,11 +35,13 @@ const App = () => {
   }, [transactionsList]);
 
   const handleAdd = (transaction) => {
-    const newArrayTransactions = [...transactionsList, transaction];
+    var itemService = new ItemService();
+    itemService.createTransaction(transaction);
+    // const newArrayTransactions = [...transactionsList, transaction];
 
-    setTransactionsList(newArrayTransactions);
+    // setTransactionsList(newArrayTransactions);
 
-    localStorage.setItem("transactions", JSON.stringify(newArrayTransactions));
+    // localStorage.setItem("transactions", JSON.stringify(newArrayTransactions));
   };
 
   return (
