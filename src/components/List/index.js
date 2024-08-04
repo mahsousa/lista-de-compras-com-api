@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ListItem from "../ListItem";
 import * as C from "./style"; 
+import ItemService from "../../services/item-service";
 
 
-const List = ({ itens, setItens}) =>{
+const List = ({ itens, setItens, listItens}) =>{
+
+  useEffect(() =>{
+    listItens();
+  },[]);
 
   //um filtro que carrega todas as transações onde é diferente do ID passado por parametro
   
   const onDelete = (ID) =>{
-      const newArray = itens.filter((transaction) => transaction.id !== ID);
-      setItens(newArray);
-      localStorage.setItem("transactions", JSON.stringify(newArray));
+      var itemService = new ItemService(); 
+      itemService.deleteTransaction(ID).then(
+        () => {
+          listItens();
+        }
+      );
   }
 
     return(

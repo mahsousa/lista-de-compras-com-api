@@ -5,12 +5,10 @@ import Dashboard from "./components/Dashboard";
 import Form from "./components/Form";
 import "./App.css";
 import ItemService from "./services/item-service";
+import List from "./components/List";
 
 const App = () => {
-  const data = localStorage.getItem("transactions");
-  const [transactionsList, setTransactionsList] = useState(
-    data ? JSON.parse(data) : []
-  );
+  const [transactionsList, setTransactionsList] = useState([]);
   const [entrada, setEntrada] = useState(0);
   const [saida, setSaida] = useState(0);
   const [total, setTotal] = useState(0);
@@ -36,14 +34,21 @@ const App = () => {
 
   const handleAdd = (transaction) => {
     var itemService = new ItemService();
-    itemService.createTransaction(transaction);
-    // const newArrayTransactions = [...transactionsList, transaction];
-
-    // setTransactionsList(newArrayTransactions);
-
-    // localStorage.setItem("transactions", JSON.stringify(newArrayTransactions));
+    itemService.createTransaction(transaction).then(
+      () => {
+        handleList();
+      }
+    );
   };
 
+  const handleList = () =>{
+    var itemService = new ItemService();
+    itemService.getTransactions().then(
+      (response) => {
+        setTransactionsList(response);
+      }
+    );
+  }
   return (
     <>
       <Header />
@@ -55,9 +60,9 @@ const App = () => {
             transactionsList={transactionsList}
             setTransactionsList={setTransactionsList}
           />
+          <List itens={transactionsList} setItens={(setTransactionsList)} listItens={handleList}/>
         </div>
       </div>
-
       <GlobalStyle />
     </>
   );
